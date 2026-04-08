@@ -1,0 +1,30 @@
+name: Auth
+version: '1.0'
+main: org.prag.mc.plugins.auth.Auth
+api-version: '1.21.1'
+load: POSTWORLD
+depend:
+  - ServerDatabaseController
+
+commands:
+  login:
+    description: Login to the server.
+    usage: /login <password>
+    permission: prag.auth.login
+    permission-message: "&cYou do not have permission to use this command."
+  register:
+    description: Register a new account.
+    usage: /register <password> <password>
+    permission: prag.auth.register
+    permission-message: "&cYou do not have permission to use this command."
+
+permissions:
+  prag.auth.login:
+    description: Allows the player to use the /login command.
+    default: true
+  prag.auth.register:
+    description: Allows the player to use the /register command.
+    default: true
+  prag.auth.admin:
+    description: Master permission for all auth administrative tasks.
+    default: op
