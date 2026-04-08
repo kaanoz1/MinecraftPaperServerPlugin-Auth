@@ -1,5 +1,7 @@
 # Auth Plugin
 
+A plugin implementation for the server that is dedicated to my beloved brother, **KeremPRO**.
+
 Auth is a high-performance authentication and session management plugin designed for Minecraft servers. It handles user registration, login states, and security logic, providing a robust API for other plugins to hook into.
 
 ## Project Structure
