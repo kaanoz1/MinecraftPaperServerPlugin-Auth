@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.potion.PotionEffect;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,7 @@ public class LoginCommand implements CommandExecutor {
             return true;
         }
 
-        if(authRepository.isSignedIn(player)){
+        if (authRepository.isSignedIn(player)) {
             player.sendMessage(Component.text("You are already logged in!", NamedTextColor.RED));
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 1.0f);
             return true;
@@ -75,11 +76,13 @@ public class LoginCommand implements CommandExecutor {
 
                 authRepository.markAsSignedIn(player);
 
-                player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+                player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType())
+                );
 
-                var potionEffects = playerStateCache.pullState(player);
-                if (potionEffects != null)
-                    player.addPotionEffects(potionEffects);
+                var savedState = playerStateCache.pullState(player);
+                if (savedState != null && !savedState.isEmpty())
+                    player.addPotionEffects(savedState);
+
 
                 PlayerLoginSuccessEvent loginEvent = new PlayerLoginSuccessEvent(player, dbPlayer);
                 Bukkit.getPluginManager().callEvent(loginEvent);

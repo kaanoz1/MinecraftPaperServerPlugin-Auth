@@ -49,15 +49,18 @@ public class AuthListener implements Listener {
         Player bukkitPlayer = event.getPlayer();
         UUID uuid = bukkitPlayer.getUniqueId();
 
-        playerStateCache.saveState(bukkitPlayer, bukkitPlayer.getActivePotionEffects());
+        var realEffects = bukkitPlayer.getActivePotionEffects().stream()
+                .filter(e -> e.getDuration() < 1000000)
+                .toList();
+        playerStateCache.saveState(bukkitPlayer, realEffects);
+
         bukkitPlayer.getActivePotionEffects().forEach(e -> bukkitPlayer.removePotionEffect(e.getType()));
 
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1, false, false));
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, Integer.MAX_VALUE, 255, false, false));
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, Integer.MAX_VALUE, 200, false, false));
-        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 255, false, false));
-
+        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 1, false, true, true));
+        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false, false));
+        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, Integer.MAX_VALUE, 255, false, false, false));
+        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, Integer.MAX_VALUE, 128, false, false, false));
+        bukkitPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 255, false, false, false));
         authRepository.markAsSignedOut(bukkitPlayer);
 
         try (Session session = ServerDatabaseController.getSessionFactory().openSession()) {
@@ -92,7 +95,13 @@ public class AuthListener implements Listener {
 
         if (isPlayerFrozen) {
             event.quitMessage(null);
-            playerStateCache.clearState(player);
+
+            player.getActivePotionEffects().forEach(e -> player.removePotionEffect(e.getType()));
+
+            var saved = playerStateCache.pullState(player);
+            if (saved != null)
+                player.addPotionEffects(saved);
+
         } else {
             Component quitMsg = Component.text()
                     .append(Component.text("[", NamedTextColor.GRAY))
