@@ -9,7 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.potion.PotionEffect;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +16,6 @@ import org.jspecify.annotations.NonNull;
 import org.prag.mc.plugins.auth.Cache.PlayerStateCache;
 import org.prag.mc.plugins.auth.Events.PlayerLoginSuccessEvent;
 import org.prag.mc.plugins.auth.Repositories.AuthRepository;
-import org.prag.mc.plugins.serverDatabaseController.Auth.PlayerRegisterOptions;
 import org.prag.mc.plugins.serverDatabaseController.Models.RecordedPlayer;
 import org.prag.mc.plugins.serverDatabaseController.ServerDatabaseController;
 
@@ -87,15 +85,15 @@ public class LoginCommand implements CommandExecutor {
                 PlayerLoginSuccessEvent loginEvent = new PlayerLoginSuccessEvent(player, dbPlayer);
                 Bukkit.getPluginManager().callEvent(loginEvent);
 
-                player.sendMessage(Component.text("Login successful! Welcome back.", NamedTextColor.GREEN));
+                player.sendMessage(Component.text("Giriş başarılı! Hoş geldin.", NamedTextColor.GREEN));
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
             } else {
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 1.0f);
-                player.sendMessage(Component.text("Incorrect password! Please try again.", NamedTextColor.RED));
+                player.sendMessage(Component.text("Şifre yanlış! Tekrar dene.", NamedTextColor.RED));
             }
 
         } catch (Exception e) {
-            Component errorMsg = Component.text("A database error occurred during login.", NamedTextColor.DARK_PURPLE);
+            Component errorMsg = Component.text("Giriş yapma sırasında bir veritabanı hatası oluştu. Daha sonra tekrar deneyin.", NamedTextColor.DARK_PURPLE);
             player.sendMessage(errorMsg);
 
             Bukkit.getOnlinePlayers().forEach(p -> p.kick(errorMsg));

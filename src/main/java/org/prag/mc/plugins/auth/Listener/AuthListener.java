@@ -72,18 +72,18 @@ public class AuthListener implements Listener {
             if (player == null) {
                 player = new RecordedPlayer(uuid, bukkitPlayer.getName());
                 session.persist(player);
-                bukkitPlayer.sendMessage(Component.text(WelcomeMessageProducer.getRandomWelcome() + " ", NamedTextColor.LIGHT_PURPLE).append(Component.text("Please register using ", NamedTextColor.GREEN).append(Component.text("/register <password> <password>", NamedTextColor.YELLOW))));
+                bukkitPlayer.sendMessage(Component.text(WelcomeMessageProducer.getRandomWelcome() + " ", NamedTextColor.LIGHT_PURPLE).append(Component.text("Şu komutla kayıt ol: ", NamedTextColor.GREEN).append(Component.text("/register <şifre> <şifre>", NamedTextColor.YELLOW))));
                 bukkitPlayer.showTitle(WelcomeMessageProducer.getNewPlayerTitle());
             } else if (!player.isRegistered()) {
                 bukkitPlayer.sendMessage(Component.text(WelcomeMessageProducer.getRandomReminder(), NamedTextColor.YELLOW));
                 bukkitPlayer.showTitle(WelcomeMessageProducer.getRegisterReminderTitle());
             } else {
-                bukkitPlayer.sendMessage(Component.text("Welcome back! Please login using ", NamedTextColor.GREEN).append(Component.text("/login <password>", NamedTextColor.YELLOW)));
+                bukkitPlayer.sendMessage(Component.text("Hoş geldin! Giriş yapmak için ", NamedTextColor.GREEN).append(Component.text("/login <şifre>", NamedTextColor.YELLOW)));
                 bukkitPlayer.showTitle(WelcomeMessageProducer.getLoginReminderTitle());
             }
             transaction.commit();
         } catch (Exception e) {
-            bukkitPlayer.kick(Component.text("Database error occurred. Please try again later.", NamedTextColor.LIGHT_PURPLE));
+            bukkitPlayer.kick(Component.text("Veritabanı hatası. Daha sonra tekrar deneyin.", NamedTextColor.LIGHT_PURPLE));
             Auth.getPlugin(Auth.class).getLogger().log(Level.SEVERE, "Database error in PlayerJoinEvent", e);
         }
     }
@@ -103,13 +103,12 @@ public class AuthListener implements Listener {
                 player.addPotionEffects(saved);
 
         } else {
-            Component quitMsg = Component.text()
+            Component quitMsg = Component.text("", NamedTextColor.GRAY)
                     .append(Component.text("[", NamedTextColor.GRAY))
                     .append(Component.text("!", NamedTextColor.LIGHT_PURPLE))
                     .append(Component.text("] ", NamedTextColor.GRAY))
                     .append(Component.text(player.getName(), NamedTextColor.DARK_PURPLE))
-                    .append(Component.text(" has left the journey.", NamedTextColor.LIGHT_PURPLE))
-                    .build();
+                    .append(Component.text(" sunucudan ayrıldı.", NamedTextColor.LIGHT_PURPLE));
 
             event.quitMessage(quitMsg);
             authRepository.markAsSignedOut(player);
@@ -133,7 +132,7 @@ public class AuthListener implements Listener {
             String cmd = event.getMessage().toLowerCase();
             if (!cmd.startsWith("/login") && !cmd.startsWith("/register")) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(Component.text("You must login to use commands!", NamedTextColor.GOLD));
+                event.getPlayer().sendMessage(Component.text("Komut girmeden önce giriş yapmalısın!", NamedTextColor.GOLD));
             }
         }
     }

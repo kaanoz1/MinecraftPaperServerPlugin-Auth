@@ -10,15 +10,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WelcomeMessageProducer {
 
     private static final String[] NEW_PLAYER_MESSAGES = {
-            "Welcome to the club!",
-            "A new legend has arrived!",
-            "Glad to see you here, adventurer!"
+            "Kulübe hoş geldin!",
+            "Yeni bir efsane geldi!",
+            "Seni burada görmek güzel, maceracı!"
     };
 
     private static final String[] REMIND_MESSAGES = {
-            "Please register to secure your account.",
-            "Security first! Register now.",
-            "Your journey awaits, just one more step!"
+            "Hesabınızı güvenceye almak için lütfen kayıt olun.",
+            "Önce güvenlik! Şimdi kayıt olun.",
+            "Yolculuğunuz sizi bekliyor, sadece bir adım kaldı!"
     };
 
     public static String getRandomWelcome() {
@@ -31,24 +31,24 @@ public class WelcomeMessageProducer {
 
     public static Title getNewPlayerTitle() {
         return Title.title(
-                Component.text("WELCOME", NamedTextColor.AQUA),
-                Component.text("Please /register <password> <password>", NamedTextColor.WHITE),
+                Component.text("HOŞ GELDİN!", NamedTextColor.AQUA),
+                Component.text("Kayıt olmak için: /register <şifre> <şifre>", NamedTextColor.WHITE),
                 Title.Times.times(Duration.ofMillis(500), Duration.ofSeconds(3), Duration.ofMillis(500))
         );
     }
 
     public static Title getRegisterReminderTitle() {
         return Title.title(
-                Component.text("REGISTER", NamedTextColor.RED),
-                Component.text("Use /register <password> <password>", NamedTextColor.YELLOW),
+                Component.text("KAYIT OL!", NamedTextColor.RED),
+                Component.text("/register <şifre> <şifre>", NamedTextColor.YELLOW),
                 Title.Times.times(Duration.ofMillis(250), Duration.ofSeconds(2), Duration.ofMillis(250))
         );
     }
 
     public static Title getLoginReminderTitle() {
         return Title.title(
-                Component.text("WELCOME BACK", NamedTextColor.GREEN),
-                Component.text("Please /login <password> to start playing.", NamedTextColor.WHITE),
+                Component.text("GİRİŞ YAP!", NamedTextColor.GREEN),
+                Component.text("/login <şifre> ile oynayama başlayabilirsin.", NamedTextColor.WHITE),
                 Title.Times.times(Duration.ofMillis(500), Duration.ofSeconds(3), Duration.ofMillis(500))
         );
     }
